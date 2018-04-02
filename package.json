@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod",
+    "build:prod": "ng build --prod -bh=/video2gif/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
