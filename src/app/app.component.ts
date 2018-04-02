@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {FormGroup} from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-
+import {DomSanitizer} from '@angular/platform-browser';
+import * as gifshot from 'gifshot';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +31,35 @@ export class AppComponent {
   }
 
   setFile(file: File) {
+    const gifs: any = gifshot;
+    console.log(file);
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl((window.URL || (<any>window).webkitURL).createObjectURL(file));
+    gifs.createGIF({
+      gifWidth: 200,
+      gifHeight: 200,
+      video: [
+        (window.URL || (<any>window).webkitURL).createObjectURL(file),
+      ],
+      // interval: 0.1,
+      numFrames: 300,
+      frameDuration: 1,
+      // fontWeight: 'normal',
+      // fontSize: '16px',
+      // fontFamily: 'sans-serif',
+      // fontColor: '#ffffff',
+      // textAlign: 'center',
+      // textBaseline: 'bottom',
+      // sampleInterval: 50,
+      // offset: 10,
+      numWorkers: 2
+    }, obj => {
+      if (!obj.error) {
+        var image = obj.image,
+          animatedImage = document.createElement('img');
+        animatedImage.src = image;
+        document.body.appendChild(animatedImage);
+      }
+    });
   }
 
   preventEvent(event: DragEvent) {

@@ -38,11 +38,5 @@
     >
     <div class="drag-box__hint">Max file size is 5 mb</div>
   </form>
-  <video [src]="videoUrl" width="320" height="240" controls *ngIf="videoUrl" #video></video>
-  <div class="notification-popup__actions">
-    <button
-      [disabled]="!data.image || loading"
-      (click)="submit(data.image)"
-    >Submit</button>
-  </div>
 </div>
+<video [src]="videoUrl" width="320" height="240" controls *ngIf="videoUrl" #video></video>
