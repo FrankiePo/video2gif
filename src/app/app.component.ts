@@ -1,5 +1,7 @@
-import {Component} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-root',
@@ -9,11 +11,16 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 export class AppComponent {
   dragover = false;
   loading = false;
-  image: HTMLImageElement;
+  @ViewChild('video') video: ElementRef;
   form = new FormGroup({});
   data = {
     image: null,
   };
+  videoUrl = null;
+
+  constructor(
+    private sanitizer: DomSanitizer,
+  ) {}
 
   handlePhotoInputChange(e: Event) {
     const target: HTMLInputElement = (e.target || e.srcElement) as HTMLInputElement;
@@ -24,14 +31,7 @@ export class AppComponent {
   }
 
   setFile(file: File) {
-    console.log(file);
-    const image: HTMLImageElement = new Image();
-    const myReader: FileReader = new FileReader();
-    myReader.onloadend = (loadEvent: any) => {
-      image.src = loadEvent.target.result;
-    };
-
-    myReader.readAsDataURL(file);
+    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl((window.URL || (<any>window).webkitURL).createObjectURL(file));
   }
 
   preventEvent(event: DragEvent) {
