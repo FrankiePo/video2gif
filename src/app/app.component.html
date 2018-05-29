@@ -45,7 +45,7 @@
     <div class="card card_preview">
       <div class="card__content">
         <app-spinner [value]="progress" mode="determinate" color="primary" *ngIf="!imageSrc"></app-spinner>
-        <a [href]="downloadLink" *ngIf="downloadLink" download="video2gif.gif" target="_blank">
+        <a [href]="downloadLink" *ngIf="imageSrc" download="video2gif.gif">
           <img [src]="imageSrc" width="426" height="284"/>
         </a>
       </div>

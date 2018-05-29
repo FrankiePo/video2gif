@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, ViewChild} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {DomSanitizer} from '@angular/platform-browser';
 import * as gifshot from 'gifshot';
@@ -22,7 +22,11 @@ export class AppComponent {
 
   constructor(
     private sanitizer: DomSanitizer,
-  ) {}
+    _cd: ChangeDetectorRef,
+  ) {
+    // TODO: until fix zone bug
+    setInterval(() => _cd.markForCheck(), 200);
+  }
 
   handlePhotoInputChange(e: Event) {
     const target: HTMLInputElement = (e.target || e.srcElement) as HTMLInputElement;
