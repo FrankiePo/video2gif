@@ -10,13 +10,15 @@ import * as gifshot from 'gifshot';
 })
 export class AppComponent {
   dragover = false;
-  loading = false;
+  progress = 0;
   @ViewChild('video') video: ElementRef;
   form = new FormGroup({});
   data = {
     image: null,
   };
   videoUrl = null;
+  imageSrc = null;
+  downloadLink = null;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -32,16 +34,19 @@ export class AppComponent {
 
   setFile(file: File) {
     const gifs: any = gifshot;
-    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl((window.URL || (<any>window).webkitURL).createObjectURL(file));
-    console.log(this.videoUrl);
-    gifs.createGIF({
-      gifWidth: 200,
-      gifHeight: 200,
+    const videoUrl = (window.URL || (<any>window).webkitURL).createObjectURL(file);
+    this.imageSrc = null;
+    this.downloadLink = null;
+    this.progress = 0;
+    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(videoUrl);
+    const gif = gifs.createGIF({
+      gifWidth: 426,
+      gifHeight: 284,
       video: [
-        this.videoUrl.changingThisBreaksApplicationSecurity,
+        videoUrl,
       ],
       // interval: 0.1,
-      numFrames: 300,
+      numFrames: 30,
       frameDuration: 1,
       // fontWeight: 'normal',
       // fontSize: '16px',
@@ -51,13 +56,14 @@ export class AppComponent {
       // textBaseline: 'bottom',
       // sampleInterval: 50,
       // offset: 10,
+      progressCallback: (captureProgress) => this.progress = captureProgress * 98,
       numWorkers: 4
     }, obj => {
       if (!obj.error) {
         const image = obj.image;
-        const animatedImage = document.createElement('img');
-        animatedImage.src = image;
-        document.body.appendChild(animatedImage);
+        this.imageSrc = this.sanitizer.bypassSecurityTrustResourceUrl(image);
+        this.downloadLink = this.sanitizer.bypassSecurityTrustUrl(image);
+        this.progress = 100;
       }
     });
   }

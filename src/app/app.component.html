@@ -1,41 +1,54 @@
-<div class="notification-popup attach-file">
-  <h2 class="notification-popup__title">
-    Attach file
-  </h2>
-  <div class="notification-popup__message">
-    Select the file you want to upload
+<div class="app">
+  <div class="app__column">
+    <div class="card card_drag">
+      <div class="card__content">
+        <form
+          class="drag-box"
+          [class.drag-box--enter]="dragover"
+          [formGroup]="form"
+          (drop)="drop($event)"
+          (drag)="preventEvent($event)"
+          (dragenter)="dragOver($event)"
+          (dragover)="dragOver($event)"
+          (dragend)="dragEnd($event)"
+          (dragexit)="dragEnd($event)"
+          (dragleave)="dragEnd($event)"
+          *ngIf="!data.image"
+          novalidate>
+          <div class="drag-box__title">Drag a file here or click button to choose a file</div>
+
+          <button
+            class="drag-box__btn btn"
+            (click)="input.click()"
+          >Select file</button>
+
+          <input
+            style="display: none"
+            (change)="handlePhotoInputChange($event)"
+            type="file"
+            name="files[]"
+            accept="video/*"
+            #input
+          >
+        </form>
+      </div>
+    </div>
+
   </div>
-  <form
-    class="drag-box"
-    [class.drag-box--enter]="dragover"
-    [formGroup]="form"
-    (drop)="drop($event)"
-    (drag)="preventEvent($event)"
-    (dragenter)="dragOver($event)"
-    (dragover)="dragOver($event)"
-    (dragend)="dragEnd($event)"
-    (dragexit)="dragEnd($event)"
-    (dragleave)="dragEnd($event)"
-    *ngIf="!data.image"
-    novalidate>
-    <div class="drag-box__title">Drag a file here or browse to upload.</div>
-
-    <button
-      class="drag-box__btn"
-      cov-client-button
-      viewType="accent"
-      (click)="input.click()"
-    >Upload</button>
-
-    <input
-      style="display: none"
-      (change)="handlePhotoInputChange($event)"
-      type="file"
-      name="files[]"
-      id="file"
-      accept="video/*"
-      #input
-    >
-  </form>
+  <div class="app__column">
+    <div class="card card_preview">
+      <div class="card__content">
+        <span *ngIf="!videoUrl">Preview</span>
+        <video [src]="videoUrl" width="426" height="284" controls *ngIf="videoUrl" #video></video>
+      </div>
+    </div>
+    <div class="card card_preview">
+      <div class="card__content">
+        <app-spinner [value]="progress" mode="determinate" color="primary" *ngIf="!imageSrc"></app-spinner>
+        <a [href]="downloadLink" *ngIf="downloadLink" download="video2gif.gif" target="_blank">
+          <img [src]="imageSrc" width="426" height="284"/>
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
-<video [src]="videoUrl" width="320" height="240" controls *ngIf="videoUrl" #video></video>
