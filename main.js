@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron');
 
 let win;
 
@@ -12,7 +12,7 @@ function createWindow () {
   });
 
 
-  win.loadURL(`file://${__dirname}/dist/index.html`)
+  win.loadURL(`file://${__dirname}/dist/index.html`);
 
   //// uncomment below to open the DevTools.
   // win.webContents.openDevTools()
@@ -31,13 +31,13 @@ app.on('window-all-closed', function () {
 
   // On macOS specific close process
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
 });
 
 app.on('activate', function () {
   // macOS specific close process
   if (win === null) {
-    createWindow()
+    createWindow();
   }
 });

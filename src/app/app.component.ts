@@ -32,13 +32,13 @@ export class AppComponent {
 
   setFile(file: File) {
     const gifs: any = gifshot;
-    console.log(file);
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl((window.URL || (<any>window).webkitURL).createObjectURL(file));
+    console.log(this.videoUrl);
     gifs.createGIF({
       gifWidth: 200,
       gifHeight: 200,
       video: [
-        (window.URL || (<any>window).webkitURL).createObjectURL(file),
+        this.videoUrl.changingThisBreaksApplicationSecurity,
       ],
       // interval: 0.1,
       numFrames: 300,
@@ -51,11 +51,11 @@ export class AppComponent {
       // textBaseline: 'bottom',
       // sampleInterval: 50,
       // offset: 10,
-      numWorkers: 2
+      numWorkers: 4
     }, obj => {
       if (!obj.error) {
-        var image = obj.image,
-          animatedImage = document.createElement('img');
+        const image = obj.image;
+        const animatedImage = document.createElement('img');
         animatedImage.src = image;
         document.body.appendChild(animatedImage);
       }
